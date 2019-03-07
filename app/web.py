@@ -15,4 +15,14 @@ def healthcheck():
     return 'OK'
 
 
+@app.route('/')
+def home():
+    return render_template('basic.html')
+
+
+@app.route('/process', methods=['POST'])
+def process():
+    print(request.files['video'])
+    return "found"
+
 

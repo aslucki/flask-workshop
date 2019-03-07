@@ -3,9 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Basic</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script >
+    <script>
+        $(document).ready(function () {
+        $("#video_form").submit(function (event) {
+
+            event.preventDefault();
+            //grab all form data
+
+            $.ajax({
+                url: '{{ url_for('process') }}',
+                type: 'POST',
+                data: new FormData( this ),
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (results) {
+                    alert(results);
+                },
+                error: function(){
+                    alert("error in ajax form submission");
+                }
+            });
+
+            return false;
+        });
+    });
+    </script>
+
 </head>
 <body>
     <p>This is a basic document</p>
+    <form name="video_form" id="video_form" action="javascript:;"
+          enctype="multipart/form-data" method="post">
+        <input type=file name=video>
+        <input type="submit" value="submit">
+    </form>
 
 </body>
 </html>
