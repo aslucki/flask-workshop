@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Client Discovery Checklist</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap">
+<style>
+  /* Layout: single centered column, sticky progress header, card checklist */
+  :root {
+    --bg:           #f4f9f6;
+    --bg-surface:   #ffffff;
+    --fg:           #0e2a1a;
+    --fg-muted:     #4a7060;
+    --accent:       #1a5c38;
+    --accent-mid:   #2d8653;
+    --accent-light: #d0eed f;
+    --accent-pale:  #e8f7ee;
+    --border:       #c2dece;
+    --progress-bg:  #d0eddf;
+    --check-bg:     #1a5c38;
+    --check-mark:   #ffffff;
+    --shadow:       0 1px 3px rgba(14,42,26,.08), 0 4px 12px rgba(14,42,26,.06);
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:           #0d1f15;
+      --bg-surface:   #152b1e;
+      --fg:           #e0f2e8;
+      --fg-muted:     #7ab896;
+      --accent:       #3dba74;
+      --accent-mid:   #56cc8a;
+      --accent-light: #1e4a30;
+      --accent-pale:  #183d28;
+      --border:       #2a5c3a;
+      --progress-bg:  #1e4a30;
+      --check-bg:     #3dba74;
+      --check-mark:   #0d1f15;
+      --shadow:       0 1px 3px rgba(0,0,0,.3), 0 4px 12px rgba(0,0,0,.2);
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg:           #0d1f15;
+    --bg-surface:   #152b1e;
+    --fg:           #e0f2e8;
+    --fg-muted:     #7ab896;
+    --accent:       #3dba74;
+    --accent-mid:   #56cc8a;
+    --accent-light: #1e4a30;
+    --accent-pale:  #183d28;
+    --border:       #2a5c3a;
+    --progress-bg:  #1e4a30;
+    --check-bg:     #3dba74;
+    --check-mark:   #0d1f15;
+    --shadow:       0 1px 3px rgba(0,0,0,.3), 0 4px 12px rgba(0,0,0,.2);
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100%;
+    padding-left:  max(16px, env(safe-area-inset-left,  0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 0 2.5rem;
+  }
+
+  /* ── Page header ─────────────────────────────────────────── */
+  .page-header {
+    text-align: center;
+    padding-block: 3rem 2rem;
+    max-width: 640px;
+    margin-inline: auto;
+  }
+
+  .page-header .eyebrow {
+    display: inline-block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent-mid);
+    background: var(--accent-pale);
+    border: 1px solid var(--border);
+    padding: .3em .85em;
+    border-radius: 999px;
+    margin-bottom: 1.1rem;
+  }
+
+  .page-header h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.15;
+    text-wrap: balance;
+    color: var(--fg);
+    margin-bottom: .75rem;
+  }
+
+  .page-header h1 span {
+    color: var(--accent);
+  }
+
+  .page-header p {
+    color: var(--fg-muted);
+    font-size: 14px;
+    max-width: 420px;
+    margin-inline: auto;
+  }
+
+  /* ── Sticky progress bar ─────────────────────────────────── */
+  .progress-wrapper {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 10;
+    background: var(--bg);
+    padding-block: .85rem;
+    padding-left:  max(16px, env(safe-area-inset-left,  0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    margin-left:  calc(-1 * max(16px, env(safe-area-inset-left,  0px)));
+    margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(8px);
+  }
+
+  .progress-inner {
+    max-width: 640px;
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .progress-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--fg-muted);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    min-width: 72px;
+  }
+
+  .progress-label .count {
+    color: var(--accent);
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 7px;
+    background: var(--progress-bg);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-mid));
+    border-radius: 999px;
+    width: 0%;
+    transition: width .35s cubic-bezier(.4,0,.2,1);
+  }
+
+  .progress-pct {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    min-width: 36px;
+    text-align: right;
+  }
+
+  /* ── Checklist ───────────────────────────────────────────── */
+  .checklist {
+    max-width: 640px;
+    margin-inline: auto;
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+    list-style: none;
+  }
+
+  .checklist-item {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    transition: transform .15s ease, box-shadow .15s ease, border-color .2s ease;
+  }
+
+  .checklist-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(14,42,26,.1), 0 8px 20px rgba(14,42,26,.08);
+  }
+
+  .checklist-item.done {
+    border-color: var(--accent);
+    background: var(--accent-pale);
+  }
+
+  .checklist-label {
+    display: flex;
+    align-items: flex-start;
+    gap: .9rem;
+    padding: 1rem 1.1rem;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* hide native checkbox */
+  .checklist-label input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  /* custom checkbox */
+  .custom-box {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: .1rem;
+    transition: background .2s ease, border-color .2s ease, transform .15s ease;
+  }
+
+  .checklist-item.done .custom-box {
+    background: var(--check-bg);
+    border-color: var(--check-bg);
+    transform: scale(1.05);
+  }
+
+  .custom-box svg {
+    opacity: 0;
+    transform: scale(.6);
+    transition: opacity .2s ease, transform .2s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  .checklist-item.done .custom-box svg {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .item-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .item-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--fg);
+    line-height: 1.35;
+    transition: color .2s ease;
+  }
+
+  .checklist-item.done .item-title {
+    color: var(--accent);
+  }
+
+  .item-desc {
+    font-size: 13px;
+    color: var(--fg-muted);
+    margin-top: .2rem;
+    line-height: 1.5;
+    transition: opacity .2s ease;
+  }
+
+  .checklist-item.done .item-desc {
+    opacity: .7;
+  }
+
+  /* step badge */
+  .step-badge {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    background: var(--accent-pale);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent-mid);
+    margin-top: .15rem;
+    font-variant-numeric: tabular-nums;
+    transition: background .2s, border-color .2s, color .2s;
+  }
+
+  .checklist-item.done .step-badge {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  /* ── Completion banner ───────────────────────────────────── */
+  .completion-banner {
+    max-width: 640px;
+    margin-inline: auto;
+    margin-top: 1.5rem;
+    padding: 1.4rem 1.5rem;
+    background: var(--accent-pale);
+    border: 1.5px solid var(--accent);
+    border-radius: 14px;
+    text-align: center;
+    display: none;
+  }
+
+  .completion-banner.visible {
+    display: block;
+    animation: pop-in .3s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  @keyframes pop-in {
+    from { opacity: 0; transform: scale(.95) translateY(6px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .completion-banner .banner-icon {
+    font-size: 2rem;
+    margin-bottom: .4rem;
+    display: block;
+  }
+
+  .completion-banner h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: .3rem;
+  }
+
+  .completion-banner p {
+    font-size: 13px;
+    color: var(--fg-muted);
+  }
+
+  /* ── Reset button ───────────────────────────────────────── */
+  .actions {
+    max-width: 640px;
+    margin-inline: auto;
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .reset-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--fg-muted);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .5em 1.2em;
+    cursor: pointer;
+    letter-spacing: .02em;
+    transition: color .15s, border-color .15s, background .15s;
+  }
+
+  .reset-btn:hover {
+    color: var(--fg);
+    border-color: var(--fg-muted);
+    background: var(--accent-pale);
+  }
+
+  .reset-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* ── Focus ring ─────────────────────────────────────────── */
+  .checklist-label:focus-within .custom-box {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <span class="eyebrow">Discovery Process</span>
+  <h1>Client <span>Discovery</span> Checklist</h1>
+  <p>Work through each step to build a complete picture before the engagement begins.</p>
+</div>
+
+<div class="progress-wrapper" aria-label="Progress">
+  <div class="progress-inner">
+    <span class="progress-label"><span class="count" id="checked-count">0</span> of 12</span>
+    <div class="progress-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progress-bar-role">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <span class="progress-pct" id="progress-pct">0%</span>
+  </div>
+</div>
+
+<ul class="checklist" id="checklist">
+
+  <li class="checklist-item" data-id="1">
+    <label class="checklist-label">
+      <input type="checkbox" id="item-1" aria-describedby="desc-1">
+      <span class="custom-box" aria-hidden="true">
+        <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+          <path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="item-content">
+        <span class="item-title">Initial Contact &amp; Introduction</span>
+        <span class="item-desc" id="desc-1">Confirm the right decision-maker is involved. Set the agenda for the discovery session and agree on format.</span>
+      </span>
+      <span class="step-badge" aria-hidden="true">01</span>
+    </label>
+  </li>
+
+  <li class="checklist-item" data-id="2">
+    <label class="checklist-label">
+      <input type="checkbox" id="item-2" aria-describedby="desc-2">
+      <span class="custom-box" aria-hidden="true">
+        <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+          <path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="item-content">
+        <span class="item-title">Needs Assessment Interview</span>
+        <span class="item-desc" id="desc-2">Conduct a structured interview to uncover pain points, desired outcomes, and what has been tried before.</span>
+      </span>
+      <span class="step-badge" aria-hidden="true">02</span>
+    </label>
+  </li>
+
+  <li class="checklist-item" data-id="3">
+    <label class="checklist-label">
+      <input type="checkbox" id="item-3" aria-describedby="desc-3">
+      <span class="custom-box" aria-hidden="true">
+        <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+          <path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="item-content">
+        <span class="item-title">Stakeholder Mapping</span>
+        <span class="item-desc" id="desc-3">Identify all individuals who will influence, approve, or be affected by the engagement. Note their priorities.</span>
+      </span>
+      <span class="step-badge" aria-hidden="true">03</span>
+    </label>
+  </li>
+
+  <li class="checklist-item" data-id="4">
+    <label class="checklist-label">
+      <input type="checkbox" id="item-4" aria-describedby="desc-4">
+      <span class="custom-box" aria-hidden="true">
+        <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+          <path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="item-content">
+        <span class="item-title">Business Goals Definition</span>
+        <span class="item-desc" id="desc-4">Document the client's short- and long-term business objectives and how this project connects to each.</span>
+      </span>
+      <span class="step-badge" aria-hidden="true">04</span>
+    </label>
+  </li>
+
+  <li class="checklist-item" data-id="5">
+    <label class="checklist-label">
+      <input type="checkbox" id="item-5" aria-describedby="desc-5">
+      <span class="custom-box" aria-hidden="true">
+        <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+          <path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="item-content">
+        <span class="item-title">Budget Discussion</span>
+        <span class="item-desc" id="desc-5">Establish a realistic budget range, any hard limits, and the approval process for spend beyond scope.</span>
+      </span>
+      <span class="step-badge" aria-hidden="true">05</span>
+    </label>
+  </li>
+
+  <li class="checklist-item" data-id="6">
+    <label class="checklist-label">
+      <input type="checkbox" id="item-6" aria-describedby="desc-6">
+      <span class="custom-box" aria-hidden="true">
+        <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+          <path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="item-content">
+        <span class="item-title">Timeline &amp; Milestones Review</span>
+        <span class="item-desc" id="desc-6">Agree on critical deadlines, external dependencies, and how the project phases will be sequenced.</span>
+      </span>
+      <span class="step-badge" aria-hidden="true">06</span>
+    </label>
+  </li>
+
+  <li class="checklist-item" data-id="7">
+    <label class="checklist-label">
+      <input type="checkbox" id="item-7" aria-describedby="desc-7">
+      <span class="custom-box" aria-hidden="true">
+        <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+          <path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="item-content">
+        <span class="item-title">Competitive Landscape Analysis</span>
+        <span class="item-desc" id="desc-7">Review key competitors together. Understand what differentiates the client and what threats shape their context.</span>
+      </span>
+      <span class="step-badge" aria-hidden="true">07</span>
+    </label>
+  </li>
+
+  <li class="checklist-item" data-id="8">
+    <label class="checklist-label">
+      <input type="checkbox" id="item-8" aria-describedby="desc-8">
+      <span class="custom-box" aria-hidden="true">
+        <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+          <path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="item-content">
+        <span class="item-title">Current Challenges Audit</span>
+        <span class="item-desc" id="desc-8">Catalogue existing blockers, broken processes, and technical or organisational constraints that limit progress.</span>
+      </span>
+      <span class="step-badge" aria-hidden="true">08</span>
+    </label>
+  </li>
+
+  <li class="checklist-item" data-id="9">
+    <label class="checklist-label">
+      <input type="checkbox" id="item-9" aria-describedby="desc-9">
+      <span class="custom-box" aria-hidden="true">
+        <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+          <path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="item-content">
+        <span class="item-title">Success Metrics Agreement</span>
+        <span class="item-desc" id="desc-9">Define what good looks like. Lock in specific, measurable criteria that both sides will use to judge the outcome.</span>
+      </span>
+      <span class="step-badge" aria-hidden="true">09</span>
+    </label>
+  </li>
+
+  <li class="checklist-item" data-id="10">
+    <label class="checklist-label">
+      <input type="checkbox" id="item-10" aria-describedby="desc-10">
+      <span class="custom-box" aria-hidden="true">
+        <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+          <path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="item-content">
+        <span class="item-title">Deliverable Definition</span>
+        <span class="item-desc" id="desc-10">Specify every tangible output: format, fidelity, quantity, and who owns the review and acceptance of each.</span>
+      </span>
+      <span class="step-badge" aria-hidden="true">10</span>
+    </label>
+  </li>
+
+  <li class="checklist-item" data-id="11">
+    <label class="checklist-label">
+      <input type="checkbox" id="item-11" aria-describedby="desc-11">
+      <span class="custom-box" aria-hidden="true">
+        <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+          <path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="item-content">
+        <span class="item-title">Scope &amp; Exclusions Sign-off</span>
+        <span class="item-desc" id="desc-11">Write out explicitly what is in scope and what is out. Have the client confirm in writing before work starts.</span>
+      </span>
+      <span class="step-badge" aria-hidden="true">11</span>
+    </label>
+  </li>
+
+  <li class="checklist-item" data-id="12">
+    <label class="checklist-label">
+      <input type="checkbox" id="item-12" aria-describedby="desc-12">
+      <span class="custom-box" aria-hidden="true">
+        <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+          <path d="M1 4L4.5 7.5L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="item-content">
+        <span class="item-title">Onboarding &amp; Kickoff Plan</span>
+        <span class="item-desc" id="desc-12">Schedule the kickoff meeting, assign ownership of each workstream, and share the first 30-day action plan.</span>
+      </span>
+      <span class="step-badge" aria-hidden="true">12</span>
+    </label>
+  </li>
+
+</ul>
+
+<div class="completion-banner" id="completion-banner" role="alert" aria-live="polite">
+  <span class="banner-icon" aria-hidden="true">✓</span>
+  <h2>Discovery Complete</h2>
+  <p>All 12 steps are done. You are ready to move to the proposal stage.</p>
+</div>
+
+<div class="actions">
+  <button class="reset-btn" id="reset-btn" type="button">Reset checklist</button>
+</div>
+
+<script>
+  const TOTAL = 12;
+  const STORAGE_KEY = 'client-discovery-v1';
+
+  const fill     = document.getElementById('progress-fill');
+  const pct      = document.getElementById('progress-pct');
+  const counter  = document.getElementById('checked-count');
+  const progress = document.getElementById('progress-bar-role');
+  const banner   = document.getElementById('completion-banner');
+  const resetBtn = document.getElementById('reset-btn');
+
+  function updateProgress() {
+    const checked = document.querySelectorAll('.checklist-item.done').length;
+    const p = Math.round((checked / TOTAL) * 100);
+
+    fill.style.width   = p + '%';
+    pct.textContent    = p + '%';
+    counter.textContent = checked;
+    progress.setAttribute('aria-valuenow', p);
+    banner.classList.toggle('visible', checked === TOTAL);
+  }
+
+  function saveState() {
+    try {
+      const state = {};
+      document.querySelectorAll('.checklist-item').forEach(item => {
+        state[item.dataset.id] = item.classList.contains('done');
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {}
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const state = JSON.parse(raw);
+      document.querySelectorAll('.checklist-item').forEach(item => {
+        const id = item.dataset.id;
+        if (state[id]) {
+          item.classList.add('done');
+          item.querySelector('input[type="checkbox"]').checked = true;
+        }
+      });
+    } catch (e) {}
+  }
+
+  // Wire each checkbox
+  document.querySelectorAll('.checklist-item').forEach(item => {
+    const checkbox = item.querySelector('input[type="checkbox"]');
+
+    checkbox.addEventListener('change', () => {
+      item.classList.toggle('done', checkbox.checked);
+      updateProgress();
+      saveState();
+    });
+  });
+
+  resetBtn.addEventListener('click', () => {
+    document.querySelectorAll('.checklist-item').forEach(item => {
+      item.classList.remove('done');
+      item.querySelector('input[type="checkbox"]').checked = false;
+    });
+    updateProgress();
+    saveState();
+  });
+
+  // Init
+  loadState();
+  updateProgress();
+</script>
+
+</body>
+</html>
