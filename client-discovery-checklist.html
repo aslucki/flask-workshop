@@ -1,0 +1,666 @@
+<title>Client Discovery Checklist</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@600;700&display=swap">
+
+<style>
+/* Layout: sticky progress header + single-column section cards, centered at 680px */
+:root {
+  --bg: #EDF1F7;
+  --surface: #FFFFFF;
+  --surface-hover: #F7FAFC;
+  --border: #CFDAE8;
+  --fg: #1A2740;
+  --fg-muted: #5E7390;
+  --accent: #0369A1;
+  --accent-bg: #E0F2FE;
+  --accent-muted: #93C5E8;
+  --done: #0B7A6E;
+  --done-bg: #ECFDF5;
+  --header-bg: #FFFFFF;
+  --track: #CFDAE8;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0C1726;
+    --surface: #142136;
+    --surface-hover: #1B2D47;
+    --border: #233450;
+    --fg: #DCE9F5;
+    --fg-muted: #7A9BB8;
+    --accent: #38BDF8;
+    --accent-bg: #0C2340;
+    --accent-muted: #1E4F7A;
+    --done: #34D399;
+    --done-bg: #042F22;
+    --header-bg: #0F1E30;
+    --track: #1E3550;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0C1726;
+  --surface: #142136;
+  --surface-hover: #1B2D47;
+  --border: #233450;
+  --fg: #DCE9F5;
+  --fg-muted: #7A9BB8;
+  --accent: #38BDF8;
+  --accent-bg: #0C2340;
+  --accent-muted: #1E4F7A;
+  --done: #34D399;
+  --done-bg: #042F22;
+  --header-bg: #0F1E30;
+  --track: #1E3550;
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-fill,
+  .cb-check,
+  .section-chevron,
+  .item,
+  .cb-box,
+  .section-badge { transition: none !important; }
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 3.5rem;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 11;
+  background: var(--header-bg);
+}
+
+/* ---- Sticky header ---- */
+.site-header {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 10;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border);
+  padding-block: 1rem 0.875rem;
+  margin-left: max(-16px, calc(-1 * env(safe-area-inset-left, 0px)));
+  margin-right: max(-16px, calc(-1 * env(safe-area-inset-right, 0px)));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+.header-inner { max-width: 680px; margin: 0 auto; }
+
+.header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.header-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.page-title {
+  font-family: 'Syne', system-ui, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  line-height: 1.3;
+}
+
+.page-subtitle {
+  font-size: 0.75rem;
+  color: var(--fg-muted);
+}
+
+.progress-stat {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.progress-pct {
+  font-family: 'Syne', system-ui, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  display: block;
+}
+
+.progress-count {
+  font-size: 0.6875rem;
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+  display: block;
+}
+
+.progress-track {
+  height: 4px;
+  background: var(--track);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  width: 0%;
+  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---- Main ---- */
+.main { max-width: 680px; margin: 1.75rem auto 0; }
+
+/* ---- Section card ---- */
+.section-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.125rem;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.13s;
+}
+
+.section-head:hover { background: var(--surface-hover); }
+
+.section-head:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.section-num {
+  font-family: 'Syne', system-ui, sans-serif;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  flex-shrink: 0;
+  min-width: 1.5rem;
+}
+
+.section-title {
+  font-family: 'Syne', system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  flex: 1;
+  min-width: 0;
+  text-wrap: balance;
+}
+
+.section-badge {
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-muted);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.125rem 0.5rem;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+
+.section-badge.all-done {
+  background: var(--done-bg);
+  color: var(--done);
+  border-color: transparent;
+}
+
+.section-chevron {
+  color: var(--fg-muted);
+  flex-shrink: 0;
+  opacity: 0.55;
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.section-card.collapsed .section-chevron { transform: rotate(-90deg); }
+.section-card.collapsed .section-items { display: none; }
+.section-card.collapsed .section-head { border-bottom-color: transparent; }
+
+.section-items { padding: 0.375rem 0; }
+
+/* ---- Checklist item ---- */
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.5625rem 1.125rem;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.item:hover { background: var(--surface-hover); }
+
+.item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* custom checkbox */
+.cb-box {
+  flex-shrink: 0;
+  width: 17px;
+  height: 17px;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  position: relative;
+  margin-top: 3px;
+  background: var(--surface);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.item:hover .cb-box { border-color: var(--accent); }
+
+.item.checked .cb-box {
+  background: var(--done);
+  border-color: var(--done);
+}
+
+.cb-check {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.15s, transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.item.checked .cb-check { opacity: 1; transform: scale(1); }
+
+.cb-check svg {
+  width: 9px;
+  height: 7px;
+  stroke: white;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.item-text {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--fg);
+  flex: 1;
+  min-width: 0;
+  transition: color 0.2s;
+}
+
+.item.checked .item-text {
+  color: var(--fg-muted);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--fg-muted);
+}
+
+/* ---- Footer ---- */
+.footer-row {
+  max-width: 680px;
+  margin: 0.5rem auto 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.reset-btn {
+  background: none;
+  border: none;
+  color: var(--fg-muted);
+  font-size: 0.8125rem;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  opacity: 0.7;
+  transition: opacity 0.15s, color 0.15s;
+}
+
+.reset-btn:hover { opacity: 1; color: var(--fg); }
+.reset-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+/* ---- Completion banner ---- */
+.done-banner {
+  max-width: 680px;
+  margin: 1.5rem auto 0;
+  background: var(--done-bg);
+  border: 1px solid var(--done);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  text-align: center;
+  display: none;
+}
+
+.done-banner.visible { display: block; }
+
+.done-banner-title {
+  font-family: 'Syne', system-ui, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--done);
+  margin-bottom: 0.2rem;
+}
+
+.done-banner-body {
+  font-size: 0.8125rem;
+  color: var(--fg-muted);
+}
+</style>
+
+<header class="site-header" role="banner">
+  <div class="header-inner">
+    <div class="header-row">
+      <div class="header-title-group">
+        <span class="page-title">Client Discovery Checklist</span>
+        <span class="page-subtitle">Track your discovery session in real time</span>
+      </div>
+      <div class="progress-stat" aria-live="polite" aria-atomic="true">
+        <span class="progress-pct" id="pct">0%</span>
+        <span class="progress-count" id="count">0 / 23 items</span>
+      </div>
+    </div>
+    <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressbar" aria-label="Overall completion">
+      <div class="progress-fill" id="progressfill"></div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- 01 Pre-Discovery Prep -->
+  <div class="section-card" id="sec-1">
+    <div class="section-head" role="button" tabindex="0" aria-expanded="true" aria-controls="items-1">
+      <span class="section-num">01</span>
+      <span class="section-title">Pre-Discovery Prep</span>
+      <span class="section-badge" id="badge-1">0 / 4</span>
+      <svg class="section-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="section-items" id="items-1">
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="1">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Review the client's website, case studies, and existing materials</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="1">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Research their industry trends, terminology, and market dynamics</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="1">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Prepare a structured question guide for the discovery session</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="1">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Identify key stakeholders, decision-makers, and their roles</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 Business Overview -->
+  <div class="section-card" id="sec-2">
+    <div class="section-head" role="button" tabindex="0" aria-expanded="true" aria-controls="items-2">
+      <span class="section-num">02</span>
+      <span class="section-title">Business Overview</span>
+      <span class="section-badge" id="badge-2">0 / 5</span>
+      <svg class="section-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="section-items" id="items-2">
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="2">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Document company background, history, and organizational structure</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="2">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Understand current pain points, blockers, and unmet needs</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="2">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Clarify short-term and long-term goals and desired outcomes</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="2">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Define success metrics, KPIs, and how results will be measured</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="2">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Establish expected timeline, go-live target, and budget range</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 Technical Assessment -->
+  <div class="section-card" id="sec-3">
+    <div class="section-head" role="button" tabindex="0" aria-expanded="true" aria-controls="items-3">
+      <span class="section-num">03</span>
+      <span class="section-title">Technical Assessment</span>
+      <span class="section-badge" id="badge-3">0 / 4</span>
+      <svg class="section-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="section-items" id="items-3">
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="3">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Inventory the current technology stack, platforms, and hosting environment</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="3">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Map existing integrations, APIs, and third-party service dependencies</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="3">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Identify security, compliance, and regulatory requirements (SOC 2, GDPR, etc.)</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="3">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Understand expected user volume, traffic patterns, and scalability needs</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 User & Market -->
+  <div class="section-card" id="sec-4">
+    <div class="section-head" role="button" tabindex="0" aria-expanded="true" aria-controls="items-4">
+      <span class="section-num">04</span>
+      <span class="section-title">User &amp; Market</span>
+      <span class="section-badge" id="badge-4">0 / 4</span>
+      <svg class="section-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="section-items" id="items-4">
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="4">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Define primary target audiences, user segments, and key personas</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="4">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Identify key competitors and what differentiates the client from them</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="4">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Gather brand guidelines, visual identity assets, and tone of voice</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="4">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Outline content strategy, ownership model, and publishing workflow</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 Project Scope -->
+  <div class="section-card" id="sec-5">
+    <div class="section-head" role="button" tabindex="0" aria-expanded="true" aria-controls="items-5">
+      <span class="section-num">05</span>
+      <span class="section-title">Project Scope</span>
+      <span class="section-badge" id="badge-5">0 / 6</span>
+      <svg class="section-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="section-items" id="items-5">
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="5">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">List must-have features required for the initial launch</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="5">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Capture nice-to-have features and backlog candidates for future phases</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="5">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Document known constraints, limitations, and explicit out-of-scope items</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="5">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Agree on immediate next steps and assign owners to each action item</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="5">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Schedule follow-up meetings, reviews, and key project milestones</span>
+      </div>
+      <div class="item" role="checkbox" aria-checked="false" tabindex="0" data-section="5">
+        <div class="cb-box"><div class="cb-check"><svg viewBox="0 0 9 7"><polyline points="1,3.5 3.5,6 8,1"/></svg></div></div>
+        <span class="item-text">Send discovery summary notes and proposal timeline to client</span>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="done-banner" id="donebanner" role="alert" aria-live="polite">
+  <div class="done-banner-title">Discovery complete</div>
+  <div class="done-banner-body">All 23 items checked. Ready to move into proposal and project scoping.</div>
+</div>
+
+<div class="footer-row">
+  <button class="reset-btn" id="resetbtn">Reset checklist</button>
+</div>
+
+<script>
+(function () {
+  var STORAGE_KEY = 'cdc-v1';
+  var TOTAL = 23;
+  var SEC_TOTALS = { '1': 4, '2': 5, '3': 4, '4': 4, '5': 6 };
+
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (e) {}
+
+  var items      = document.querySelectorAll('.item');
+  var fill       = document.getElementById('progressfill');
+  var pbar       = document.getElementById('progressbar');
+  var pctEl      = document.getElementById('pct');
+  var countEl    = document.getElementById('count');
+  var banner     = document.getElementById('donebanner');
+  var resetBtn   = document.getElementById('resetbtn');
+
+  // Restore saved state
+  items.forEach(function (item, idx) {
+    if (saved[idx]) {
+      item.classList.add('checked');
+      item.setAttribute('aria-checked', 'true');
+    }
+    item.addEventListener('click', function () { toggle(item, idx); });
+    item.addEventListener('keydown', function (e) {
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(item, idx); }
+    });
+  });
+
+  // Section collapse / expand
+  document.querySelectorAll('.section-head').forEach(function (head) {
+    head.addEventListener('click', function (e) {
+      // Don't fire when click came from an item inside (items are in .section-items, not .section-head)
+      var card = head.closest('.section-card');
+      var collapsed = card.classList.toggle('collapsed');
+      head.setAttribute('aria-expanded', String(!collapsed));
+    });
+    head.addEventListener('keydown', function (e) {
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); head.click(); }
+    });
+  });
+
+  function toggle(item, idx) {
+    var checked = item.classList.toggle('checked');
+    item.setAttribute('aria-checked', String(checked));
+    try {
+      if (checked) { saved[idx] = 1; } else { delete saved[idx]; }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+    } catch (e) {}
+    updateSection(item.dataset.section);
+    updateProgress();
+  }
+
+  function updateSection(sec) {
+    var sItems = document.querySelectorAll('.item[data-section="' + sec + '"]');
+    var done = 0;
+    sItems.forEach(function (i) { if (i.classList.contains('checked')) done++; });
+    var total = SEC_TOTALS[sec];
+    var badge = document.getElementById('badge-' + sec);
+    badge.textContent = done + ' / ' + total;
+    badge.classList.toggle('all-done', done === total);
+  }
+
+  function updateProgress() {
+    var done = document.querySelectorAll('.item.checked').length;
+    var pct  = Math.round((done / TOTAL) * 100);
+    fill.style.width = pct + '%';
+    pbar.setAttribute('aria-valuenow', pct);
+    pctEl.textContent  = pct + '%';
+    countEl.textContent = done + ' / ' + TOTAL + ' items';
+    banner.classList.toggle('visible', done === TOTAL);
+  }
+
+  resetBtn.addEventListener('click', function () {
+    items.forEach(function (item) {
+      item.classList.remove('checked');
+      item.setAttribute('aria-checked', 'false');
+    });
+    saved = {};
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    Object.keys(SEC_TOTALS).forEach(updateSection);
+    updateProgress();
+  });
+
+  // Boot
+  Object.keys(SEC_TOTALS).forEach(updateSection);
+  updateProgress();
+}());
+</script>
