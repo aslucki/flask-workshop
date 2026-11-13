@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discovery Checklist</title>
+    <style>
+        /* Green color palette */
+        :root {
+            --bg-primary: #f0faf0;
+            --bg-card: #ffffff;
+            --accent-dark: #1a6b3a;
+            --accent-mid: #2e8b57;
+            --accent-light: #4caf50;
+            --accent-pale: #c8e6c9;
+            --accent-xpale: #e8f5e9;
+            --text-primary: #1b4332;
+            --text-secondary: #2d6a4f;
+            --border-color: #a5d6a7;
+            --check-done: #388e3c;
+            --check-pending: #81c784;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 2rem 1rem;
+            min-height: 100vh;
+        }
+
+        header {
+            max-width: 760px;
+            margin: 0 auto 2rem;
+            border-left: 5px solid var(--accent-mid);
+            padding-left: 1rem;
+        }
+
+        header h1 {
+            font-size: 1.9rem;
+            color: var(--accent-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .checklist-container {
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: var(--accent-pale);
+            padding: 0.75rem 1.25rem;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--accent-dark);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.85rem 1.25rem;
+            border-bottom: 1px solid var(--accent-xpale);
+            transition: background 0.15s;
+        }
+
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        .checklist-item:hover {
+            background: var(--accent-xpale);
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            accent-color: var(--accent-light);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .item-label {
+            flex: 1;
+        }
+
+        .item-label .title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .item-label .note {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            margin-top: 0.2rem;
+        }
+
+        .badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: var(--accent-mid);
+            color: #fff;
+            white-space: nowrap;
+            align-self: center;
+        }
+
+        .badge.optional {
+            background: var(--check-pending);
+            color: var(--accent-dark);
+        }
+
+        .progress-bar-wrap {
+            max-width: 760px;
+            margin: 0 auto 1.5rem;
+            background: var(--accent-pale);
+            border-radius: 8px;
+            padding: 0.9rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-bar-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 10px;
+            background: var(--bg-primary);
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 30%;
+            background: linear-gradient(90deg, var(--accent-mid), var(--accent-light));
+            border-radius: 5px;
+            transition: width 0.3s;
+        }
+
+        .progress-count {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-dark);
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Discovery Checklist</h1>
+        <p>Track project discovery tasks and ensure nothing is missed before kick-off.</p>
+    </header>
+
+    <div class="progress-bar-wrap">
+        <span class="progress-bar-label">Overall progress</span>
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        <span class="progress-count">3 / 10 done</span>
+    </div>
+
+    <div class="checklist-container">
+
+        <div class="section">
+            <div class="section-header">Stakeholders &amp; Goals</div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="item-1" checked>
+                <div class="item-label">
+                    <div class="title">Identify primary stakeholders</div>
+                    <div class="note">List all decision-makers and key contacts.</div>
+                </div>
+                <span class="badge">Required</span>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="item-2" checked>
+                <div class="item-label">
+                    <div class="title">Define project goals &amp; success metrics</div>
+                    <div class="note">Agree on measurable outcomes with the team.</div>
+                </div>
+                <span class="badge">Required</span>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="item-3">
+                <div class="item-label">
+                    <div class="title">Document known constraints</div>
+                    <div class="note">Budget, timeline, regulatory, or technical limits.</div>
+                </div>
+                <span class="badge optional">Optional</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">Technical Discovery</div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="item-4" checked>
+                <div class="item-label">
+                    <div class="title">Audit existing codebase</div>
+                    <div class="note">Review language, frameworks, and dependency versions.</div>
+                </div>
+                <span class="badge">Required</span>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="item-5">
+                <div class="item-label">
+                    <div class="title">Map third-party integrations</div>
+                    <div class="note">APIs, services, and external data sources in use.</div>
+                </div>
+                <span class="badge">Required</span>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="item-6">
+                <div class="item-label">
+                    <div class="title">Review infrastructure &amp; deployment pipeline</div>
+                    <div class="note">Hosting, CI/CD, environments, and monitoring setup.</div>
+                </div>
+                <span class="badge">Required</span>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="item-7">
+                <div class="item-label">
+                    <div class="title">Identify security &amp; compliance requirements</div>
+                    <div class="note">GDPR, SOC 2, HIPAA, or other applicable standards.</div>
+                </div>
+                <span class="badge optional">Optional</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">Process &amp; Handoff</div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="item-8">
+                <div class="item-label">
+                    <div class="title">Confirm team structure &amp; roles</div>
+                    <div class="note">Who owns what — dev, design, product, QA.</div>
+                </div>
+                <span class="badge">Required</span>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="item-9">
+                <div class="item-label">
+                    <div class="title">Set up communication channels</div>
+                    <div class="note">Slack, Jira, Confluence, or project-specific tools.</div>
+                </div>
+                <span class="badge optional">Optional</span>
+            </div>
+
+            <div class="checklist-item">
+                <input type="checkbox" id="item-10">
+                <div class="item-label">
+                    <div class="title">Schedule kick-off meeting</div>
+                    <div class="note">All stakeholders aligned before work begins.</div>
+                </div>
+                <span class="badge">Required</span>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
