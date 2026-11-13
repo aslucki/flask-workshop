@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Discovery Phase Checklist</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #f5f7fa;
+      color: #2d3748;
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #1a202c;
+      margin-bottom: 0.4rem;
+    }
+
+    header p {
+      font-size: 0.95rem;
+      color: #718096;
+    }
+
+    .progress-bar-wrap {
+      margin-top: 1rem;
+      background: #e2e8f0;
+      border-radius: 999px;
+      height: 8px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #4299e1;
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    .progress-label {
+      font-size: 0.8rem;
+      color: #718096;
+      margin-top: 0.4rem;
+      text-align: right;
+    }
+
+    .section {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      margin-bottom: 1.25rem;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.9rem 1.25rem;
+      background: #f7fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .section-icon {
+      font-size: 1.1rem;
+    }
+
+    .section-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #2d3748;
+      flex: 1;
+    }
+
+    .section-count {
+      font-size: 0.75rem;
+      color: #a0aec0;
+      font-weight: 500;
+    }
+
+    .checklist {
+      list-style: none;
+      padding: 0.5rem 0;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.6rem 1.25rem;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .checklist li:hover {
+      background: #f7fafc;
+    }
+
+    .checklist li input[type="checkbox"] {
+      margin-top: 2px;
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      cursor: pointer;
+      accent-color: #4299e1;
+    }
+
+    .checklist li label {
+      font-size: 0.9rem;
+      color: #4a5568;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+
+    .checklist li.checked label {
+      color: #a0aec0;
+      text-decoration: line-through;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #a0aec0;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Client Discovery Phase Checklist</h1>
+    <p>Track completion of key discovery activities before moving to proposal.</p>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="progress-label" id="progressLabel">0 of 0 items complete</div>
+  </header>
+
+  <!-- Section 1: Initial Meeting -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">&#128203;</span>
+      <span class="section-title">Initial Meeting</span>
+      <span class="section-count" id="count-s1"></span>
+    </div>
+    <ul class="checklist" id="s1">
+      <li><input type="checkbox" id="s1-1"><label for="s1-1">Schedule and confirm kick-off meeting with primary contact</label></li>
+      <li><input type="checkbox" id="s1-2"><label for="s1-2">Prepare and share meeting agenda in advance</label></li>
+      <li><input type="checkbox" id="s1-3"><label for="s1-3">Record or take detailed notes during the session</label></li>
+      <li><input type="checkbox" id="s1-4"><label for="s1-4">Collect client contact details and preferred communication channels</label></li>
+    </ul>
+  </div>
+
+  <!-- Section 2: Business Understanding -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">&#127970;</span>
+      <span class="section-title">Business Understanding</span>
+      <span class="section-count" id="count-s2"></span>
+    </div>
+    <ul class="checklist" id="s2">
+      <li><input type="checkbox" id="s2-1"><label for="s2-1">Document the client's core business model and revenue streams</label></li>
+      <li><input type="checkbox" id="s2-2"><label for="s2-2">Identify key business goals and success metrics for this project</label></li>
+      <li><input type="checkbox" id="s2-3"><label for="s2-3">Understand the target audience and end users of the solution</label></li>
+      <li><input type="checkbox" id="s2-4"><label for="s2-4">Identify pain points and problems the project must solve</label></li>
+      <li><input type="checkbox" id="s2-5"><label for="s2-5">Review any existing solutions or prior attempts at this problem</label></li>
+    </ul>
+  </div>
+
+  <!-- Section 3: Technical Requirements -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">&#9881;</span>
+      <span class="section-title">Technical Requirements</span>
+      <span class="section-count" id="count-s3"></span>
+    </div>
+    <ul class="checklist" id="s3">
+      <li><input type="checkbox" id="s3-1"><label for="s3-1">Gather a list of required integrations and third-party systems</label></li>
+      <li><input type="checkbox" id="s3-2"><label for="s3-2">Understand existing tech stack, hosting, and infrastructure constraints</label></li>
+      <li><input type="checkbox" id="s3-3"><label for="s3-3">Clarify data ownership, storage, and compliance requirements (GDPR, HIPAA, etc.)</label></li>
+      <li><input type="checkbox" id="s3-4"><label for="s3-4">Document performance, scalability, and uptime expectations</label></li>
+      <li><input type="checkbox" id="s3-5"><label for="s3-5">Identify browser/device/platform support requirements</label></li>
+    </ul>
+  </div>
+
+  <!-- Section 4: Stakeholders -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">&#128100;</span>
+      <span class="section-title">Stakeholders</span>
+      <span class="section-count" id="count-s4"></span>
+    </div>
+    <ul class="checklist" id="s4">
+      <li><input type="checkbox" id="s4-1"><label for="s4-1">Identify the project sponsor and key decision-maker</label></li>
+      <li><input type="checkbox" id="s4-2"><label for="s4-2">Map all stakeholders and their roles / influence level</label></li>
+      <li><input type="checkbox" id="s4-3"><label for="s4-3">Confirm who must approve deliverables and sign off on requirements</label></li>
+      <li><input type="checkbox" id="s4-4"><label for="s4-4">Understand internal politics or constraints that may affect the project</label></li>
+    </ul>
+  </div>
+
+  <!-- Section 5: Timeline & Budget -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">&#128197;</span>
+      <span class="section-title">Timeline &amp; Budget</span>
+      <span class="section-count" id="count-s5"></span>
+    </div>
+    <ul class="checklist" id="s5">
+      <li><input type="checkbox" id="s5-1"><label for="s5-1">Confirm hard deadlines and desired launch date</label></li>
+      <li><input type="checkbox" id="s5-2"><label for="s5-2">Understand any external events or dependencies that drive the timeline</label></li>
+      <li><input type="checkbox" id="s5-3"><label for="s5-3">Establish the overall budget range and payment preferences</label></li>
+      <li><input type="checkbox" id="s5-4"><label for="s5-4">Clarify what is in scope for this phase vs. future phases</label></li>
+    </ul>
+  </div>
+
+  <!-- Section 6: Next Steps -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">&#9989;</span>
+      <span class="section-title">Next Steps</span>
+      <span class="section-count" id="count-s6"></span>
+    </div>
+    <ul class="checklist" id="s6">
+      <li><input type="checkbox" id="s6-1"><label for="s6-1">Send meeting summary and notes to the client within 24 hours</label></li>
+      <li><input type="checkbox" id="s6-2"><label for="s6-2">Identify any open questions requiring follow-up responses</label></li>
+      <li><input type="checkbox" id="s6-3"><label for="s6-3">Schedule follow-up meeting or workshop if additional discovery is needed</label></li>
+      <li><input type="checkbox" id="s6-4"><label for="s6-4">Draft the Statement of Work (SOW) or project proposal</label></li>
+      <li><input type="checkbox" id="s6-5"><label for="s6-5">Set up project management tooling and share access with the client</label></li>
+    </ul>
+  </div>
+
+  <footer>Client Discovery Checklist &mdash; v1.0</footer>
+</div>
+
+<script>
+  function updateProgress() {
+    const all = document.querySelectorAll('.checklist input[type="checkbox"]');
+    const checked = document.querySelectorAll('.checklist input[type="checkbox"]:checked');
+    const pct = all.length ? Math.round((checked.length / all.length) * 100) : 0;
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent =
+      checked.length + ' of ' + all.length + ' items complete (' + pct + '%)';
+
+    // Update per-section counts
+    ['s1','s2','s3','s4','s5','s6'].forEach(function(id) {
+      const sec = document.getElementById(id);
+      const total = sec.querySelectorAll('input[type="checkbox"]').length;
+      const done  = sec.querySelectorAll('input[type="checkbox"]:checked').length;
+      document.getElementById('count-' + id).textContent = done + '/' + total;
+    });
+  }
+
+  document.querySelectorAll('.checklist li').forEach(function(li) {
+    li.addEventListener('change', function() {
+      var cb = li.querySelector('input[type="checkbox"]');
+      li.classList.toggle('checked', cb.checked);
+      updateProgress();
+    });
+  });
+
+  updateProgress();
+</script>
+</body>
+</html>
